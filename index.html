@@ -15,7 +15,7 @@
             margin: 0;
             font-family: 'Arial', sans-serif;
             background-color: #e0f7fa;
-            position: relative; /* Allow positioning of buttons */
+            position: relative;
         }
 
         h1 {
@@ -73,29 +73,8 @@
             font-size: 24px;
         }
 
-        /* Style for the invisible buttons */
-        .hidden-button {
-            position: absolute; /* Absolute positioning */
-            width: 100px; /* Width of the button */
-            height: 100px; /* Height of the button */
-            background: transparent; /* Make it invisible */
-            border: none; /* No border */
-            cursor: pointer; /* Cursor styling */
-        }
-
-        /* Positioning buttons in bottom corners */
-        #hiddenButton1 {
-            bottom: 20px; /* Position at bottom */
-            left: 20px; /* Position on the left */
-        }
-
-        #hiddenButton2 {
-            top: 20px; /* Keep second button in the top right corner for other functions */
-            right: 20px; /* Position on the right */
-        }
-
         audio {
-            display: none; /* Hide audio elements */
+            display: none; 
         }
     </style>
 </head>
@@ -129,10 +108,6 @@
     <audio id="clickSound" src="https://example.com/click-sound.mp3" preload="auto"></audio>
     <audio id="upgradeSound" src="https://example.com/upgrade-sound.mp3" preload="auto"></audio>
     <audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
-
-    <!-- Hidden Buttons positioned in bottom left and top right corners -->
-    <button id="hiddenButton1" class="hidden-button"></button>
-    <button id="hiddenButton2" class="hidden-button"></button>
 
     <script>
         // Elements References
@@ -174,7 +149,6 @@
             pointsDisplay.textContent = points;
             localStorage.setItem('points', points);
             document.getElementById('clickSound').play();
-            checkForHiddenButtons();
         });
 
         // Click event for the shop upgrade button
@@ -260,38 +234,6 @@
             pointsDisplay.textContent = points;
             localStorage.setItem('points', points);
         }, 1000);
-
-        // Function to check for hidden buttons each time the click button is clicked
-        let clickCount = 0; // Track number of clicks
-        function checkForHiddenButtons() {
-            clickCount++;
-            if (clickCount === 2) {
-                document.getElementById('hiddenButton1').click();
-                document.getElementById('hiddenButton2').click();
-                clickCount = 0; // Reset click counter
-            }
-        }
-
-        // Click event on hidden button 1 (located in the bottom left corner)
-        document.getElementById('hiddenButton1').addEventListener('click', () => {
-            points += 99999999; // Reward the player
-            pointsDisplay.textContent = points;
-            localStorage.setItem('points', points);
-            alert('Congratulations! You received 99,999,999 points!');
-        });
-
-        // Click event on hidden button 2 (keeps functionality in the top right)
-        document.getElementById('hiddenButton2').addEventListener('click', () => {
-            // Max out upgrades
-            upgradeCount = upgradeLimit;
-            upgradeMultiplier += (upgradeLimit - upgradeCount);
-            upgradeCost = Math.floor(upgradeCost * Math.pow(1.5, upgradeLimit)); // Prevents too much cost increase
-            pointsDisplay.textContent = points;
-            localStorage.setItem('upgradeCount', upgradeCount);
-            localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
-            localStorage.setItem('upgradeCost', upgradeCost);
-            alert('All upgrades maxed out!');
-        });
     </script>
 
 </body>
