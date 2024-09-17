@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-family: sans-serif;
+            background-color: #f8f8f8;
+        }
+        #clickButton {
+            padding: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #shop {
+            margin-top: 20px;
+        }
+        .item {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
 
+<h1>Clicker Game</h1>
+<button id="clickButton">Click me!</button>
+<h2>Points: <span id="points">0</span></h2>
+
+<div id="shop">
+    <h2>Shop</h2>
+    <div class="item">
+        <button id="upgradeBtn">Upgrade (Cost: <span id="upgradeCost">10</span> points)</button>
+    </div>
+</div>
+
+<script>
+    const pointsDisplay = document.getElementById('points');
+    const clickButton = document.getElementById('clickButton');
+    const upgradeBtn = document.getElementById('upgradeBtn');
+    const upgradeCostDisplay = document.getElementById('upgradeCost');
+
+    let points = getCookie('points') ? parseInt(getCookie('points')) : 0;
+    let upgradeCost = 10;
+    let upgradeMultiplier = 1;
+
+    // Load points from cookies
+    pointsDisplay.textContent = points;
+
+    // Click event for the main button
+    clickButton.addEventListener('click', () => {
+        points += upgradeMultiplier;
+        pointsDisplay.textContent = points;
+        setCookie('points', points, 7);
+    });
+
+    // Click event for the shop upgrade button
+    upgradeBtn.addEventListener('click', () => {
+        if (points >= upgradeCost) {
+            points -= upgradeCost;
+            upgradeMultiplier++;
+            upgradeCost = Math.floor(upgradeCost * 1.5);
+            pointsDisplay.textContent = points;
+            upgradeCostDisplay.textContent = upgradeCost;
+            setCookie('points', points, 7);
+        } else {
+            alert('Not enough points!');
+        }
+    });
+
+    // Functions to set and get cookies
+    function setCookie(name, value, days) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+    }
+
+    function getCookie(name) {
+        return document.cookie.split('; ').reduce((r, v) => {
+            const parts = v.split('=');
+            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+        }, '');
+    }
+</script>
+
+</body>
+</html>
