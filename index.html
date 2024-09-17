@@ -160,19 +160,26 @@
                 points -= upgradeCost;
                 upgradeMultiplier++;
                 upgradeCount++;
+
+                // Calculate new upgrade cost
                 upgradeCost = Math.floor(upgradeCost * 1.5);
+                
+                // Update the display
                 pointsDisplay.textContent = points;
                 upgradeCostDisplay.textContent = upgradeCost;
+
+                // Save to localStorage
                 localStorage.setItem('points', points);
                 localStorage.setItem('upgradeCost', upgradeCost);
                 localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
                 localStorage.setItem('upgradeCount', upgradeCount);
+
                 alert(`Upgraded! Total Upgrades: ${upgradeCount}`);
                 document.getElementById('upgradeSound').play();
             } else if (upgradeCount >= upgradeLimit) {
                 alert('Max upgrades reached!');
             } else {
-                alert('Not enough points!');
+                alert('Not enough points for the upgrade!');
             }
         });
 
@@ -241,7 +248,6 @@
         // Reset game functionality
         resetBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to reset the game? This will clear all progress!')) {
-                // Reset all game values
                 points = 0;
                 upgradeCost = 10;
                 autoClickerCost = 100;
@@ -253,9 +259,9 @@
                 doublePointsActive = false;
                 upgradeCount = 0;
 
-                // Update local storage
+                // Clear local storage
                 localStorage.clear();
-                
+
                 // Update the display
                 pointsDisplay.textContent = points;
                 upgradeCostDisplay.textContent = upgradeCost;
