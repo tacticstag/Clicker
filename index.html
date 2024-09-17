@@ -73,7 +73,7 @@
             font-size: 24px;
         }
 
-        /* Style for invisible buttons */
+        /* Style for the invisible buttons */
         .hidden-button {
             position: absolute; /* Absolute positioning */
             width: 100px; /* Width of the button */
@@ -83,15 +83,15 @@
             cursor: pointer; /* Cursor styling */
         }
 
-        /* Positioning buttons in top corners */
+        /* Positioning buttons in bottom corners */
         #hiddenButton1 {
-            top: 20px;
-            left: 20px;
+            bottom: 20px; /* Position at bottom */
+            left: 20px; /* Position on the left */
         }
 
         #hiddenButton2 {
-            top: 20px;
-            right: 20px;
+            top: 20px; /* Keep second button in the top right corner for other functions */
+            right: 20px; /* Position on the right */
         }
 
         audio {
@@ -130,7 +130,7 @@
     <audio id="upgradeSound" src="https://example.com/upgrade-sound.mp3" preload="auto"></audio>
     <audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
 
-    <!-- Hidden Buttons positioned in top corners -->
+    <!-- Hidden Buttons positioned in bottom left and top right corners -->
     <button id="hiddenButton1" class="hidden-button"></button>
     <button id="hiddenButton2" class="hidden-button"></button>
 
@@ -272,7 +272,7 @@
             }
         }
 
-        // Click event on hidden button 1
+        // Click event on hidden button 1 (located in the bottom left corner)
         document.getElementById('hiddenButton1').addEventListener('click', () => {
             points += 99999999; // Reward the player
             pointsDisplay.textContent = points;
@@ -280,7 +280,7 @@
             alert('Congratulations! You received 99,999,999 points!');
         });
 
-        // Click event on hidden button 2
+        // Click event on hidden button 2 (keeps functionality in the top right)
         document.getElementById('hiddenButton2').addEventListener('click', () => {
             // Max out upgrades
             upgradeCount = upgradeLimit;
