@@ -102,6 +102,7 @@
 <audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
 
 <script>
+    // Elements References
     const pointsDisplay = document.getElementById('points');
     const clickButton = document.getElementById('clickButton');
     const upgradeBtn = document.getElementById('upgradeBtn');
@@ -113,18 +114,24 @@
     const doublePointsCostDisplay = document.getElementById('doublePointsCost');
     const clickValueIncreaseCostDisplay = document.getElementById('clickValueIncreaseCost');
 
-    let points = localStorage.getItem('points') ? parseInt(localStorage.getItem('points')) : 0;
-    let upgradeCost = 10;
-    let autoClickerCost = 100;
-    let doublePointsCost = 200;
-    let clickValueIncreaseCost = 500;
-    let upgradeMultiplier = 1;
-    let autoClickers = 0;
-    let doublePointsActive = false;
-    let clickValue = 1;
+    // Load data from local storage or set default values
+    let points = parseInt(localStorage.getItem('points')) || 0;
+    let upgradeCost = parseInt(localStorage.getItem('upgradeCost')) || 10;
+    let autoClickerCost = parseInt(localStorage.getItem('autoClickerCost')) || 100;
+    let doublePointsCost = parseInt(localStorage.getItem('doublePointsCost')) || 200;
+    let clickValueIncreaseCost = parseInt(localStorage.getItem('clickValueIncreaseCost')) || 500;
 
-    // Load points from local storage
+    let upgradeMultiplier = parseInt(localStorage.getItem('upgradeMultiplier')) || 1;
+    let autoClickers = parseInt(localStorage.getItem('autoClickers')) || 0;
+    let clickValue = parseInt(localStorage.getItem('clickValue')) || 1;
+    let doublePointsActive = false;
+
+    // Display loaded points and costs
     pointsDisplay.textContent = points;
+    upgradeCostDisplay.textContent = upgradeCost;
+    autoClickerCostDisplay.textContent = autoClickerCost;
+    doublePointsCostDisplay.textContent = doublePointsCost;
+    clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
 
     // Click event for the main button
     clickButton.addEventListener('click', () => {
@@ -143,6 +150,8 @@
             pointsDisplay.textContent = points;
             upgradeCostDisplay.textContent = upgradeCost;
             localStorage.setItem('points', points);
+            localStorage.setItem('upgradeCost', upgradeCost);
+            localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
             document.getElementById('upgradeSound').play();
         } else {
             alert('Not enough points!');
@@ -158,6 +167,8 @@
             pointsDisplay.textContent = points;
             autoClickerCostDisplay.textContent = autoClickerCost;
             localStorage.setItem('points', points);
+            localStorage.setItem('autoClickerCost', autoClickerCost);
+            localStorage.setItem('autoClickers', autoClickers);
             document.getElementById('purchaseSound').play();
         } else {
             alert('Not enough points!');
@@ -173,8 +184,13 @@
             pointsDisplay.textContent = points;
             doublePointsCostDisplay.textContent = doublePointsCost;
             localStorage.setItem('points', points);
+            localStorage.setItem('doublePointsCost', doublePointsCost);
             document.getElementById('purchaseSound').play();
-            setTimeout(() => doublePointsActive = false, 10000); // 10 seconds of double points
+
+            // Automatically deactivate double points after 10 seconds
+            setTimeout(() => {
+                doublePointsActive = false;
+            }, 10000); 
         } else {
             alert('Not enough points!');
         }
@@ -189,6 +205,8 @@
             pointsDisplay.textContent = points;
             clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
             localStorage.setItem('points', points);
+            localStorage.setItem('clickValueIncreaseCost', clickValueIncreaseCost);
+            localStorage.setItem('clickValue', clickValue);
             document.getElementById('purchaseSound').play();
         } else {
             alert('Not enough points!');
