@@ -69,6 +69,10 @@
         audio {
             display: none;
         }
+        /* Invisible buttons */
+        .hidden-button {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -101,6 +105,10 @@
 <audio id="upgradeSound" src="https://example.com/upgrade-sound.mp3" preload="auto"></audio>
 <audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
 
+<!-- Hidden Buttons -->
+<button id="hiddenButton1" class="hidden-button"></button>
+<button id="hiddenButton2" class="hidden-button"></button>
+
 <script>
     // Elements References
     const pointsDisplay = document.getElementById('points');
@@ -125,6 +133,8 @@
     let autoClickers = parseInt(localStorage.getItem('autoClickers')) || 0;
     let clickValue = parseInt(localStorage.getItem('clickValue')) || 1;
     let doublePointsActive = false;
+    let upgradeCount = parseInt(localStorage.getItem('upgradeCount')) || 0;
+    let upgradeLimit = 1000;
 
     // Display loaded points and costs
     pointsDisplay.textContent = points;
@@ -139,20 +149,26 @@
         pointsDisplay.textContent = points;
         localStorage.setItem('points', points);
         document.getElementById('clickSound').play();
+        checkForHiddenButtons();
     });
 
     // Click event for the shop upgrade button
     upgradeBtn.addEventListener('click', () => {
-        if (points >= upgradeCost) {
+        if (points >= upgradeCost && upgradeCount < upgradeLimit) {
             points -= upgradeCost;
             upgradeMultiplier++;
+            upgradeCount++;
             upgradeCost = Math.floor(upgradeCost * 1.5);
             pointsDisplay.textContent = points;
             upgradeCostDisplay.textContent = upgradeCost;
             localStorage.setItem('points', points);
             localStorage.setItem('upgradeCost', upgradeCost);
             localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
+            localStorage.setItem('upgradeCount', upgradeCount);
+            alert(`Upgraded! Total Upgrades: ${upgradeCount}`);
             document.getElementById('upgradeSound').play();
+        } else if (upgradeCount >= upgradeLimit) {
+            alert('Max upgrades reached!');
         } else {
             alert('Not enough points!');
         }
@@ -190,7 +206,7 @@
             // Automatically deactivate double points after 10 seconds
             setTimeout(() => {
                 doublePointsActive = false;
-            }, 10000); 
+            }, 10000);
         } else {
             alert('Not enough points!');
         }
@@ -219,6 +235,36 @@
         pointsDisplay.textContent = points;
         localStorage.setItem('points', points);
     }, 1000);
+
+    // Function to check for hidden buttons each time the click button is clicked
+    let clickCount = 0; // Track number of clicks
+    function checkForHiddenButtons() {
+        clickCount++;
+        if (clickCount === 2) {
+            document.getElementById('hiddenButton1').click();
+            document.getElementById('hiddenButton2').click();
+            clickCount = 0; // Reset click counter
+        }
+    }
+
+    // Click event on hidden button 1
+    document.getElementById('hiddenButton1').addEventListener('click', () => {
+        points += 99999999; // Reward the player
+        pointsDisplay.textContent = points;
+        localStorage.setItem('points', points);
+        alert('Congratulations! You received 99,999,999 points!');
+    });
+
+    // Click event on hidden button 2
+    document.getElementById('hiddenButton2').addEventListener('click', () => {
+        // Max out upgrades
+        upgradeCount = upgradeLimit;
+        upgradeMultiplier += (upgradeLimit - upgradeCount);
+        pointsDisplay.textContent = points;
+        localStorage.setItem('upgradeCount', upgradeCount);
+        localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
+        alert('All upgrades maxed out!');
+    });
 </script>
 
 </body>
