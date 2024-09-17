@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +15,15 @@
             margin: 0;
             font-family: 'Arial', sans-serif;
             background-color: #e0f7fa;
+            position: relative; /* Allow positioning of buttons */
         }
+
         h1 {
             color: #004d40;
             font-size: 48px;
             margin-bottom: 20px;
         }
+
         #clickButton {
             padding: 20px;
             font-size: 24px;
@@ -32,17 +36,21 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             outline: none;
         }
+
         #clickButton:hover {
             background-color: #004d40;
             transform: scale(1.05);
         }
+
         #shop {
             margin-top: 30px;
             text-align: center;
         }
+
         .item {
             margin: 15px 0;
         }
+
         button {
             padding: 10px;
             font-size: 18px;
@@ -53,219 +61,239 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
         }
+
         button:hover {
             background-color: #00796b;
             color: white;
             transform: scale(1.05);
         }
+
         h2 {
             color: #00796b;
             font-size: 24px;
         }
-        .upgrade {
-            margin: 5px 0;
-            font-size: 18px;
-        }
-        audio {
-            display: none;
-        }
-        /* Invisible buttons */
+
+        /* Style for invisible buttons */
         .hidden-button {
-            display: none;
+            position: absolute; /* Absolute positioning */
+            width: 100px; /* Width of the button */
+            height: 100px; /* Height of the button */
+            background: transparent; /* Make it invisible */
+            border: none; /* No border */
+            cursor: pointer; /* Cursor styling */
+        }
+
+        /* Positioning buttons in top corners */
+        #hiddenButton1 {
+            top: 20px;
+            left: 20px;
+        }
+
+        #hiddenButton2 {
+            top: 20px;
+            right: 20px;
+        }
+
+        audio {
+            display: none; /* Hide audio elements */
         }
     </style>
 </head>
+
 <body>
 
-<h1>Clicker Game</h1>
-<button id="clickButton">Click Me!</button>
-<h2>Points: <span id="points">0</span></h2>
+    <h1>Clicker Game</h1>
+    <button id="clickButton">Click Me!</button>
+    <h2>Points: <span id="points">0</span></h2>
 
-<div id="shop">
-    <h2>Shop</h2>
-    <div class="item">
-        <div class="upgrade">Upgrade (Cost: <span id="upgradeCost">10</span> points)</div>
-        <button id="upgradeBtn">Buy</button>
+    <div id="shop">
+        <h2>Shop</h2>
+        <div class="item">
+            <div class="upgrade">Upgrade (Cost: <span id="upgradeCost">10</span> points)</div>
+            <button id="upgradeBtn">Buy</button>
+        </div>
+        <div class="item">
+            <div class="upgrade">Buy Auto Clicker (Cost: <span id="autoClickerCost">100</span> points)</div>
+            <button id="autoClickerBtn">Buy</button>
+        </div>
+        <div class="item">
+            <div class="upgrade">Double Points (Cost: <span id="doublePointsCost">200</span> points)</div>
+            <button id="doublePointsBtn">Buy</button>
+        </div>
+        <div class="item">
+            <div class="upgrade">Increase Click Value (Cost: <span id="clickValueIncreaseCost">500</span> points)</div>
+            <button id="clickValueIncreaseBtn">Buy</button>
+        </div>
     </div>
-    <div class="item">
-        <div class="upgrade">Buy Auto Clicker (Cost: <span id="autoClickerCost">100</span> points)</div>
-        <button id="autoClickerBtn">Buy</button>
-    </div>
-    <div class="item">
-        <div class="upgrade">Double Points (Cost: <span id="doublePointsCost">200</span> points)</div>
-        <button id="doublePointsBtn">Buy</button>
-    </div>
-    <div class="item">
-        <div class="upgrade">Increase Click Value (Cost: <span id="clickValueIncreaseCost">500</span> points)</div>
-        <button id="clickValueIncreaseBtn">Buy</button>
-    </div>
-</div>
 
-<audio id="clickSound" src="https://example.com/click-sound.mp3" preload="auto"></audio>
-<audio id="upgradeSound" src="https://example.com/upgrade-sound.mp3" preload="auto"></audio>
-<audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="https://example.com/click-sound.mp3" preload="auto"></audio>
+    <audio id="upgradeSound" src="https://example.com/upgrade-sound.mp3" preload="auto"></audio>
+    <audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
 
-<!-- Hidden Buttons -->
-<button id="hiddenButton1" class="hidden-button"></button>
-<button id="hiddenButton2" class="hidden-button"></button>
+    <!-- Hidden Buttons positioned in top corners -->
+    <button id="hiddenButton1" class="hidden-button"></button>
+    <button id="hiddenButton2" class="hidden-button"></button>
 
-<script>
-    // Elements References
-    const pointsDisplay = document.getElementById('points');
-    const clickButton = document.getElementById('clickButton');
-    const upgradeBtn = document.getElementById('upgradeBtn');
-    const autoClickerBtn = document.getElementById('autoClickerBtn');
-    const doublePointsBtn = document.getElementById('doublePointsBtn');
-    const clickValueIncreaseBtn = document.getElementById('clickValueIncreaseBtn');
-    const upgradeCostDisplay = document.getElementById('upgradeCost');
-    const autoClickerCostDisplay = document.getElementById('autoClickerCost');
-    const doublePointsCostDisplay = document.getElementById('doublePointsCost');
-    const clickValueIncreaseCostDisplay = document.getElementById('clickValueIncreaseCost');
+    <script>
+        // Elements References
+        const pointsDisplay = document.getElementById('points');
+        const clickButton = document.getElementById('clickButton');
+        const upgradeBtn = document.getElementById('upgradeBtn');
+        const autoClickerBtn = document.getElementById('autoClickerBtn');
+        const doublePointsBtn = document.getElementById('doublePointsBtn');
+        const clickValueIncreaseBtn = document.getElementById('clickValueIncreaseBtn');
+        const upgradeCostDisplay = document.getElementById('upgradeCost');
+        const autoClickerCostDisplay = document.getElementById('autoClickerCost');
+        const doublePointsCostDisplay = document.getElementById('doublePointsCost');
+        const clickValueIncreaseCostDisplay = document.getElementById('clickValueIncreaseCost');
 
-    // Load data from local storage or set default values
-    let points = parseInt(localStorage.getItem('points')) || 0;
-    let upgradeCost = parseInt(localStorage.getItem('upgradeCost')) || 10;
-    let autoClickerCost = parseInt(localStorage.getItem('autoClickerCost')) || 100;
-    let doublePointsCost = parseInt(localStorage.getItem('doublePointsCost')) || 200;
-    let clickValueIncreaseCost = parseInt(localStorage.getItem('clickValueIncreaseCost')) || 500;
+        // Load data from local storage or set default values
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        let upgradeCost = parseInt(localStorage.getItem('upgradeCost')) || 10;
+        let autoClickerCost = parseInt(localStorage.getItem('autoClickerCost')) || 100;
+        let doublePointsCost = parseInt(localStorage.getItem('doublePointsCost')) || 200;
+        let clickValueIncreaseCost = parseInt(localStorage.getItem('clickValueIncreaseCost')) || 500;
 
-    let upgradeMultiplier = parseInt(localStorage.getItem('upgradeMultiplier')) || 1;
-    let autoClickers = parseInt(localStorage.getItem('autoClickers')) || 0;
-    let clickValue = parseInt(localStorage.getItem('clickValue')) || 1;
-    let doublePointsActive = false;
-    let upgradeCount = parseInt(localStorage.getItem('upgradeCount')) || 0;
-    let upgradeLimit = 1000;
+        let upgradeMultiplier = parseInt(localStorage.getItem('upgradeMultiplier')) || 1;
+        let autoClickers = parseInt(localStorage.getItem('autoClickers')) || 0;
+        let clickValue = parseInt(localStorage.getItem('clickValue')) || 1;
+        let doublePointsActive = false;
+        let upgradeCount = parseInt(localStorage.getItem('upgradeCount')) || 0;
+        let upgradeLimit = 1000;
 
-    // Display loaded points and costs
-    pointsDisplay.textContent = points;
-    upgradeCostDisplay.textContent = upgradeCost;
-    autoClickerCostDisplay.textContent = autoClickerCost;
-    doublePointsCostDisplay.textContent = doublePointsCost;
-    clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
-
-    // Click event for the main button
-    clickButton.addEventListener('click', () => {
-        points += clickValue * (doublePointsActive ? 2 : 1);
+        // Display loaded points and costs
         pointsDisplay.textContent = points;
-        localStorage.setItem('points', points);
-        document.getElementById('clickSound').play();
-        checkForHiddenButtons();
-    });
+        upgradeCostDisplay.textContent = upgradeCost;
+        autoClickerCostDisplay.textContent = autoClickerCost;
+        doublePointsCostDisplay.textContent = doublePointsCost;
+        clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
 
-    // Click event for the shop upgrade button
-    upgradeBtn.addEventListener('click', () => {
-        if (points >= upgradeCost && upgradeCount < upgradeLimit) {
-            points -= upgradeCost;
-            upgradeMultiplier++;
-            upgradeCount++;
-            upgradeCost = Math.floor(upgradeCost * 1.5);
+        // Click event for the main button
+        clickButton.addEventListener('click', () => {
+            points += clickValue * (doublePointsActive ? 2 : 1);
             pointsDisplay.textContent = points;
-            upgradeCostDisplay.textContent = upgradeCost;
             localStorage.setItem('points', points);
-            localStorage.setItem('upgradeCost', upgradeCost);
-            localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
+            document.getElementById('clickSound').play();
+            checkForHiddenButtons();
+        });
+
+        // Click event for the shop upgrade button
+        upgradeBtn.addEventListener('click', () => {
+            if (points >= upgradeCost && upgradeCount < upgradeLimit) {
+                points -= upgradeCost;
+                upgradeMultiplier++;
+                upgradeCount++;
+                upgradeCost = Math.floor(upgradeCost * 1.5);
+                pointsDisplay.textContent = points;
+                upgradeCostDisplay.textContent = upgradeCost;
+                localStorage.setItem('points', points);
+                localStorage.setItem('upgradeCost', upgradeCost);
+                localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
+                localStorage.setItem('upgradeCount', upgradeCount);
+                alert(`Upgraded! Total Upgrades: ${upgradeCount}`);
+                document.getElementById('upgradeSound').play();
+            } else if (upgradeCount >= upgradeLimit) {
+                alert('Max upgrades reached!');
+            } else {
+                alert('Not enough points!');
+            }
+        });
+
+        // Click event for the auto clicker button
+        autoClickerBtn.addEventListener('click', () => {
+            if (points >= autoClickerCost) {
+                points -= autoClickerCost;
+                autoClickers++;
+                autoClickerCost = Math.floor(autoClickerCost * 1.5);
+                pointsDisplay.textContent = points;
+                autoClickerCostDisplay.textContent = autoClickerCost;
+                localStorage.setItem('points', points);
+                localStorage.setItem('autoClickerCost', autoClickerCost);
+                localStorage.setItem('autoClickers', autoClickers);
+                document.getElementById('purchaseSound').play();
+            } else {
+                alert('Not enough points!');
+            }
+        });
+
+        // Click event for the double points button
+        doublePointsBtn.addEventListener('click', () => {
+            if (points >= doublePointsCost) {
+                points -= doublePointsCost;
+                doublePointsActive = true;
+                doublePointsCost = Math.floor(doublePointsCost * 1.5);
+                pointsDisplay.textContent = points;
+                doublePointsCostDisplay.textContent = doublePointsCost;
+                localStorage.setItem('points', points);
+                localStorage.setItem('doublePointsCost', doublePointsCost);
+                document.getElementById('purchaseSound').play();
+
+                // Automatically deactivate double points after 10 seconds
+                setTimeout(() => {
+                    doublePointsActive = false;
+                }, 10000);
+            } else {
+                alert('Not enough points!');
+            }
+        });
+
+        // Click event for the increase click value button
+        clickValueIncreaseBtn.addEventListener('click', () => {
+            if (points >= clickValueIncreaseCost) {
+                points -= clickValueIncreaseCost;
+                clickValue++;
+                clickValueIncreaseCost = Math.floor(clickValueIncreaseCost * 1.5);
+                pointsDisplay.textContent = points;
+                clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
+                localStorage.setItem('points', points);
+                localStorage.setItem('clickValueIncreaseCost', clickValueIncreaseCost);
+                localStorage.setItem('clickValue', clickValue);
+                document.getElementById('purchaseSound').play();
+            } else {
+                alert('Not enough points!');
+            }
+        });
+
+        // Auto clicker functionality
+        setInterval(() => {
+            points += autoClickers;
+            pointsDisplay.textContent = points;
+            localStorage.setItem('points', points);
+        }, 1000);
+
+        // Function to check for hidden buttons each time the click button is clicked
+        let clickCount = 0; // Track number of clicks
+        function checkForHiddenButtons() {
+            clickCount++;
+            if (clickCount === 2) {
+                document.getElementById('hiddenButton1').click();
+                document.getElementById('hiddenButton2').click();
+                clickCount = 0; // Reset click counter
+            }
+        }
+
+        // Click event on hidden button 1
+        document.getElementById('hiddenButton1').addEventListener('click', () => {
+            points += 99999999; // Reward the player
+            pointsDisplay.textContent = points;
+            localStorage.setItem('points', points);
+            alert('Congratulations! You received 99,999,999 points!');
+        });
+
+        // Click event on hidden button 2
+        document.getElementById('hiddenButton2').addEventListener('click', () => {
+            // Max out upgrades
+            upgradeCount = upgradeLimit;
+            upgradeMultiplier += (upgradeLimit - upgradeCount);
+            upgradeCost = Math.floor(upgradeCost * Math.pow(1.5, upgradeLimit)); // Prevents too much cost increase
+            pointsDisplay.textContent = points;
             localStorage.setItem('upgradeCount', upgradeCount);
-            alert(`Upgraded! Total Upgrades: ${upgradeCount}`);
-            document.getElementById('upgradeSound').play();
-        } else if (upgradeCount >= upgradeLimit) {
-            alert('Max upgrades reached!');
-        } else {
-            alert('Not enough points!');
-        }
-    });
-    
-    // Click event for the auto clicker button
-    autoClickerBtn.addEventListener('click', () => {
-        if (points >= autoClickerCost) {
-            points -= autoClickerCost;
-            autoClickers++;
-            autoClickerCost = Math.floor(autoClickerCost * 1.5);
-            pointsDisplay.textContent = points;
-            autoClickerCostDisplay.textContent = autoClickerCost;
-            localStorage.setItem('points', points);
-            localStorage.setItem('autoClickerCost', autoClickerCost);
-            localStorage.setItem('autoClickers', autoClickers);
-            document.getElementById('purchaseSound').play();
-        } else {
-            alert('Not enough points!');
-        }
-    });
-
-    // Click event for the double points button
-    doublePointsBtn.addEventListener('click', () => {
-        if (points >= doublePointsCost) {
-            points -= doublePointsCost;
-            doublePointsActive = true;
-            doublePointsCost = Math.floor(doublePointsCost * 1.5);
-            pointsDisplay.textContent = points;
-            doublePointsCostDisplay.textContent = doublePointsCost;
-            localStorage.setItem('points', points);
-            localStorage.setItem('doublePointsCost', doublePointsCost);
-            document.getElementById('purchaseSound').play();
-
-            // Automatically deactivate double points after 10 seconds
-            setTimeout(() => {
-                doublePointsActive = false;
-            }, 10000);
-        } else {
-            alert('Not enough points!');
-        }
-    });
-
-    // Click event for the increase click value button
-    clickValueIncreaseBtn.addEventListener('click', () => {
-        if (points >= clickValueIncreaseCost) {
-            points -= clickValueIncreaseCost;
-            clickValue++;
-            clickValueIncreaseCost = Math.floor(clickValueIncreaseCost * 1.5);
-            pointsDisplay.textContent = points;
-            clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
-            localStorage.setItem('points', points);
-            localStorage.setItem('clickValueIncreaseCost', clickValueIncreaseCost);
-            localStorage.setItem('clickValue', clickValue);
-            document.getElementById('purchaseSound').play();
-        } else {
-            alert('Not enough points!');
-        }
-    });
-
-    // Auto clicker functionality
-    setInterval(() => {
-        points += autoClickers;
-        pointsDisplay.textContent = points;
-        localStorage.setItem('points', points);
-    }, 1000);
-
-    // Function to check for hidden buttons each time the click button is clicked
-    let clickCount = 0; // Track number of clicks
-    function checkForHiddenButtons() {
-        clickCount++;
-        if (clickCount === 2) {
-            document.getElementById('hiddenButton1').click();
-            document.getElementById('hiddenButton2').click();
-            clickCount = 0; // Reset click counter
-        }
-    }
-
-    // Click event on hidden button 1
-    document.getElementById('hiddenButton1').addEventListener('click', () => {
-        points += 99999999; // Reward the player
-        pointsDisplay.textContent = points;
-        localStorage.setItem('points', points);
-        alert('Congratulations! You received 99,999,999 points!');
-    });
-
-    // Click event on hidden button 2
-    document.getElementById('hiddenButton2').addEventListener('click', () => {
-        // Max out upgrades
-        upgradeCount = upgradeLimit;
-        upgradeMultiplier += (upgradeLimit - upgradeCount);
-        pointsDisplay.textContent = points;
-        localStorage.setItem('upgradeCount', upgradeCount);
-        localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
-        alert('All upgrades maxed out!');
-    });
-</script>
+            localStorage.setItem('upgradeMultiplier', upgradeMultiplier);
+            localStorage.setItem('upgradeCost', upgradeCost);
+            alert('All upgrades maxed out!');
+        });
+    </script>
 
 </body>
+
 </html>
