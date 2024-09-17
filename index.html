@@ -9,14 +9,25 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            font-family: sans-serif;
-            background-color: #f8f8f8;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
         }
         #clickButton {
             padding: 20px;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #clickButton:hover {
+            background-color: #004d40;
         }
         #shop {
             margin-top: 20px;
@@ -24,12 +35,18 @@
         .item {
             margin: 10px 0;
         }
+        h1 {
+            color: #004d40;
+        }
+        h2 {
+            color: #00796b;
+        }
     </style>
 </head>
 <body>
 
 <h1>Clicker Game</h1>
-<button id="clickButton">Click me!</button>
+<button id="clickButton">Click Me!</button>
 <h2>Points: <span id="points">0</span></h2>
 
 <div id="shop">
@@ -37,17 +54,28 @@
     <div class="item">
         <button id="upgradeBtn">Upgrade (Cost: <span id="upgradeCost">10</span> points)</button>
     </div>
+    <div class="item">
+        <button id="autoClickerBtn">Buy Auto Clicker (Cost: <span id="autoClickerCost">100</span> points)</button>
+    </div>
 </div>
+
+<audio id="clickSound" src="click-sound.mp3" preload="auto"></audio>
+<audio id="upgradeSound" src="upgrade-sound.mp3" preload="auto"></audio>
+<audio id="purchaseSound" src="purchase-sound.mp3" preload="auto"></audio>
 
 <script>
     const pointsDisplay = document.getElementById('points');
     const clickButton = document.getElementById('clickButton');
     const upgradeBtn = document.getElementById('upgradeBtn');
+    const autoClickerBtn = document.getElementById('autoClickerBtn');
     const upgradeCostDisplay = document.getElementById('upgradeCost');
+    const autoClickerCostDisplay = document.getElementById('autoClickerCost');
 
     let points = getCookie('points') ? parseInt(getCookie('points')) : 0;
     let upgradeCost = 10;
+    let autoClickerCost = 100;
     let upgradeMultiplier = 1;
+    let autoClickers = 0;
 
     // Load points from cookies
     pointsDisplay.textContent = points;
@@ -57,6 +85,7 @@
         points += upgradeMultiplier;
         pointsDisplay.textContent = points;
         setCookie('points', points, 7);
+        document.getElementById('clickSound').play();
     });
 
     // Click event for the shop upgrade button
@@ -68,10 +97,33 @@
             pointsDisplay.textContent = points;
             upgradeCostDisplay.textContent = upgradeCost;
             setCookie('points', points, 7);
+            document.getElementById('upgradeSound').play();
         } else {
             alert('Not enough points!');
         }
     });
+    
+    // Click event for the auto clicker button
+    autoClickerBtn.addEventListener('click', () => {
+        if (points >= autoClickerCost) {
+            points -= autoClickerCost;
+            autoClickers++;
+            autoClickerCost = Math.floor(autoClickerCost * 1.5);
+            pointsDisplay.textContent = points;
+            autoClickerCostDisplay.textContent = autoClickerCost;
+            setCookie('points', points, 7);
+            document.getElementById('purchaseSound').play();
+        } else {
+            alert('Not enough points!');
+        }
+    });
+
+    // Auto clicker functionality
+    setInterval(() => {
+        points += autoClickers;
+        pointsDisplay.textContent = points;
+        setCookie('points', points, 7);
+    }, 1000);
 
     // Functions to set and get cookies
     function setCookie(name, value, days) {
