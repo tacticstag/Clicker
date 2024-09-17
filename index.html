@@ -15,6 +15,11 @@
             font-family: 'Arial', sans-serif;
             background-color: #e0f7fa;
         }
+        h1 {
+            color: #004d40;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
         #clickButton {
             padding: 20px;
             font-size: 24px;
@@ -22,24 +27,47 @@
             background-color: #00796b;
             color: white;
             border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            outline: none;
         }
         #clickButton:hover {
             background-color: #004d40;
+            transform: scale(1.05);
         }
         #shop {
-            margin-top: 20px;
+            margin-top: 30px;
+            text-align: center;
         }
         .item {
-            margin: 10px 0;
+            margin: 15px 0;
         }
-        h1 {
-            color: #004d40;
+        button {
+            padding: 10px;
+            font-size: 18px;
+            background-color: #fff;
+            border: 2px solid #00796b;
+            color: #00796b;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #00796b;
+            color: white;
+            transform: scale(1.05);
         }
         h2 {
             color: #00796b;
+            font-size: 24px;
+        }
+        .upgrade {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+        audio {
+            display: none;
         }
     </style>
 </head>
@@ -52,39 +80,57 @@
 <div id="shop">
     <h2>Shop</h2>
     <div class="item">
-        <button id="upgradeBtn">Upgrade (Cost: <span id="upgradeCost">10</span> points)</button>
+        <div class="upgrade">Upgrade (Cost: <span id="upgradeCost">10</span> points)</div>
+        <button id="upgradeBtn">Buy</button>
     </div>
     <div class="item">
-        <button id="autoClickerBtn">Buy Auto Clicker (Cost: <span id="autoClickerCost">100</span> points)</button>
+        <div class="upgrade">Buy Auto Clicker (Cost: <span id="autoClickerCost">100</span> points)</div>
+        <button id="autoClickerBtn">Buy</button>
+    </div>
+    <div class="item">
+        <div class="upgrade">Double Points (Cost: <span id="doublePointsCost">200</span> points)</div>
+        <button id="doublePointsBtn">Buy</button>
+    </div>
+    <div class="item">
+        <div class="upgrade">Increase Click Value (Cost: <span id="clickValueIncreaseCost">500</span> points)</div>
+        <button id="clickValueIncreaseBtn">Buy</button>
     </div>
 </div>
 
-<audio id="clickSound" src="click-sound.mp3" preload="auto"></audio>
-<audio id="upgradeSound" src="upgrade-sound.mp3" preload="auto"></audio>
-<audio id="purchaseSound" src="purchase-sound.mp3" preload="auto"></audio>
+<audio id="clickSound" src="https://example.com/click-sound.mp3" preload="auto"></audio>
+<audio id="upgradeSound" src="https://example.com/upgrade-sound.mp3" preload="auto"></audio>
+<audio id="purchaseSound" src="https://example.com/purchase-sound.mp3" preload="auto"></audio>
 
 <script>
     const pointsDisplay = document.getElementById('points');
     const clickButton = document.getElementById('clickButton');
     const upgradeBtn = document.getElementById('upgradeBtn');
     const autoClickerBtn = document.getElementById('autoClickerBtn');
+    const doublePointsBtn = document.getElementById('doublePointsBtn');
+    const clickValueIncreaseBtn = document.getElementById('clickValueIncreaseBtn');
     const upgradeCostDisplay = document.getElementById('upgradeCost');
     const autoClickerCostDisplay = document.getElementById('autoClickerCost');
+    const doublePointsCostDisplay = document.getElementById('doublePointsCost');
+    const clickValueIncreaseCostDisplay = document.getElementById('clickValueIncreaseCost');
 
-    let points = getCookie('points') ? parseInt(getCookie('points')) : 0;
+    let points = localStorage.getItem('points') ? parseInt(localStorage.getItem('points')) : 0;
     let upgradeCost = 10;
     let autoClickerCost = 100;
+    let doublePointsCost = 200;
+    let clickValueIncreaseCost = 500;
     let upgradeMultiplier = 1;
     let autoClickers = 0;
+    let doublePointsActive = false;
+    let clickValue = 1;
 
-    // Load points from cookies
+    // Load points from local storage
     pointsDisplay.textContent = points;
 
     // Click event for the main button
     clickButton.addEventListener('click', () => {
-        points += upgradeMultiplier;
+        points += clickValue * (doublePointsActive ? 2 : 1);
         pointsDisplay.textContent = points;
-        setCookie('points', points, 7);
+        localStorage.setItem('points', points);
         document.getElementById('clickSound').play();
     });
 
@@ -96,7 +142,7 @@
             upgradeCost = Math.floor(upgradeCost * 1.5);
             pointsDisplay.textContent = points;
             upgradeCostDisplay.textContent = upgradeCost;
-            setCookie('points', points, 7);
+            localStorage.setItem('points', points);
             document.getElementById('upgradeSound').play();
         } else {
             alert('Not enough points!');
@@ -111,7 +157,38 @@
             autoClickerCost = Math.floor(autoClickerCost * 1.5);
             pointsDisplay.textContent = points;
             autoClickerCostDisplay.textContent = autoClickerCost;
-            setCookie('points', points, 7);
+            localStorage.setItem('points', points);
+            document.getElementById('purchaseSound').play();
+        } else {
+            alert('Not enough points!');
+        }
+    });
+
+    // Click event for the double points button
+    doublePointsBtn.addEventListener('click', () => {
+        if (points >= doublePointsCost) {
+            points -= doublePointsCost;
+            doublePointsActive = true;
+            doublePointsCost = Math.floor(doublePointsCost * 1.5);
+            pointsDisplay.textContent = points;
+            doublePointsCostDisplay.textContent = doublePointsCost;
+            localStorage.setItem('points', points);
+            document.getElementById('purchaseSound').play();
+            setTimeout(() => doublePointsActive = false, 10000); // 10 seconds of double points
+        } else {
+            alert('Not enough points!');
+        }
+    });
+
+    // Click event for the increase click value button
+    clickValueIncreaseBtn.addEventListener('click', () => {
+        if (points >= clickValueIncreaseCost) {
+            points -= clickValueIncreaseCost;
+            clickValue++;
+            clickValueIncreaseCost = Math.floor(clickValueIncreaseCost * 1.5);
+            pointsDisplay.textContent = points;
+            clickValueIncreaseCostDisplay.textContent = clickValueIncreaseCost;
+            localStorage.setItem('points', points);
             document.getElementById('purchaseSound').play();
         } else {
             alert('Not enough points!');
@@ -122,21 +199,8 @@
     setInterval(() => {
         points += autoClickers;
         pointsDisplay.textContent = points;
-        setCookie('points', points, 7);
+        localStorage.setItem('points', points);
     }, 1000);
-
-    // Functions to set and get cookies
-    function setCookie(name, value, days) {
-        const expires = new Date(Date.now() + days * 864e5).toUTCString();
-        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
-    }
-
-    function getCookie(name) {
-        return document.cookie.split('; ').reduce((r, v) => {
-            const parts = v.split('=');
-            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-        }, '');
-    }
 </script>
 
 </body>
